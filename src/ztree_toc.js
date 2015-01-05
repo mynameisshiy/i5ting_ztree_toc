@@ -1,4 +1,25 @@
 /**
+ * 解决IE低版本浏览器没有console时提示错误信息的问题
+ */
+
+if (!window.console || !console.firebug){
+    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml", "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
+
+    window.console = {};
+    for (var i = 0; i < names.length; ++i)
+        window.console[names[i]] = function() {}
+}
+
+function encode_id_with_array(opts,arr) {
+	var result = 0;
+  for(var z = 0; z < arr.length; z++ ) {
+		result += factor(opts, arr.length - z ,arr[z]);
+  }
+
+	return result;
+}
+
+/**
  * 1.1.1 = 1*100*100 + 1*100 + 1
  * 1.2.2 = 1*100*100 + 2*100 + 3
  *
@@ -125,7 +146,8 @@ function factor(opts ,count,current) {
 	function _get_anchor_from_head(header_obj){
 		var name = header_obj.html();
 		var aname = name.split('.');
-		var anchor = aname.pop().trim();
+		//var anchor = aname.pop().trim();
+		var anchor = jQuery.trim(aname.pop());//IE浏览器没有trim函数，直接调用jQuery的内置trim函数解决兼容性问题
 		return anchor;
 	}
 
